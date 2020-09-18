@@ -1,14 +1,30 @@
+from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from article_app.models import Users,Login,Article
+from article_app.models import Users,Login,Article , Article_Tags,Tags
 from datetime import datetime
-from .forms import ArticleForm
+from .forms import ArticleForm ,TagsForm
+from django.core import exceptions
+# from django.contrib.auth import logout
 # Create your views here.
-def index(request):
-    return render(request,'index.html')
 
+
+def index(request):
+    articles = Article.objects.order_by('-uploaded_on')
+    print(articles)
+    return render(request,'index.html',{'articles':articles})
+
+def checkusername(request):
+    username = request.POST.get('username')
+    user = Users.objects.filter(username = username)
+
+    if user :
+        return HttpResponse('Username is already taken')
+    else:
+        return HttpResponse("Username is available")
 def register(request):
     return render(request,'registerForm.html')
+
 
 def registeruser(request):
 
@@ -29,53 +45,76 @@ def registeruser(request):
     # print(l_id.id)
     register_user = Users(name=name,username=username,DOB =dob,gender=gender,mobile=mobile,password=password,login_id=l_id)
     register_user.save()
+    return redirect(login)
 
-
-    return redirect(user_dashboard)
 
 def user_dashboard(request):
-    if request.session['login_id'] :
+    if request.session.get('login_id') is not None:
         l_id = int(request.session.get('login_id'))
         Name = Users.objects.get(login_id=l_id).name
         request.session['name'] = Name
 
-    return render(request,'user_Dashboard.html')
+        return render(request,'user_Dashboard.html')
+    else :
+        return redirect(login)
 
-def logout(request):
+def logout_act(request):
     request.session.clear()
     return redirect(index)
 
+
 def login(request):
     return render(request,'login.html')
+
 
 def getlogin(request):
     username= request.POST.get('username')
     password = request.POST.get('password')
     # print(username ,"       ",password)
-    l_id = Login.objects.get(user_name=username, password=password)
-    request.session['login_id'] = l_id.id
+    try:
+        l_id = Login.objects.get(user_name=username, password=password)
+        request.session['login_id'] = l_id.id
+    except :
+        return render(request,'login.html',{'error': "Username or Password Incorrect" })
 
     return redirect(user_dashboard)
+
 
 def create_article(request):
     if request.session.get('login_id'):
         if request.method == 'POST':
-            id = Article(uploaded_by= Login.objects.get(id = request.session.get('login_id')))
+            id = Article(uploaded_by= Users.objects.get(id = request.session.get('login_id')))
             form = ArticleForm(request.POST, request.FILES,instance=id)
-            # print(form.data) # returns query dictionary
+            tags_form = TagsForm(request.POST)
 
-            if form.is_valid():
+            print("form data :",form.data) # returns query dictionary
+
+            print(tags_form.data['tags_title'])
+            if form.is_valid() and tags_form.is_valid():
                 form.save()
-                return HttpResponse('Article Posted !!')
+                tags_form.save()
+                tag_id = Tags.objects.latest('id') # getting last row id
+                print(tag_id.id)
+                article_id = Article.objects.latest('id')
+                print(article_id)
+                article_tags_mapping = Article_Tags.objects.create(tags = tag_id , article = article_id)
+            return HttpResponse('Article Posted !!')
         else:
             form = ArticleForm()
+            tags_form = TagsForm()
             login_id = request.session.get('login_id')
             print("------",login_id)
-            return render(request,'create_article.html',{'form': form,'login_id':login_id })
+            return render(request,'create_article.html',{'form': form,'tags_form': tags_form ,'login_id':login_id })
     else:
         return redirect('login')
 
-""" TODO :  logout from user account,
+
+
+
+
+
+
+""" TODO :  
             tags,
-            show articles on index page by latest date
+            
 """

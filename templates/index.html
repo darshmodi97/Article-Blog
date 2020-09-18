@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Home Page</title>
+    <title>Articles Blog By Darsh Modi</title>
 
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700%7CLato:300,400" rel="stylesheet">
@@ -24,8 +24,8 @@
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href={% static "css/style.css" %}/>
-
-
+    <!-- Fevicon  -->
+    <link rel="icon" type="image/png" href={% static "favicon_io/favicon-32x32.png" %}/>
 </head>
 <body>
 
@@ -44,16 +44,8 @@
     </div>
     <!-- /Top Header -->
 
-    <!-- Center Header -->
-    <div id="center-header">
-        <div class="container">
 
-{#            <div class="header-ads">#}
-{#                <img class="center-block" src={% static "./img/ad-2.jpg" %} alt="">#}
-{#            </div>#}
-        </div>
-    </div>
-    <!-- /Center Header -->
+
 
     <!-- Nav Header -->
     <div id="nav-header">
@@ -159,10 +151,12 @@
                 <!-- row -->
                 <div class="row">
                     <!-- Column 1 -->
+
+                    {% for article in articles %}
                     <div class="col-md-4 col-sm-4">
                         <!-- section title -->
                         <div class="section-title">
-                            <h2 class="title">News</h2>
+                            <h2 class="title">{{ article.type }}</h2>
                         </div>
                         <!-- /section title -->
 
@@ -170,93 +164,29 @@
                         <article class="article">
                             <div class="article-img">
                                 <a href="#">
-                                    <img src={% static "./img/img-sm-1.jpg" %} alt="">
+                                    <img src= media/{{ article.image }} alt="">
                                 </a>
                                 <ul class="article-info">
                                     <li class="article-type"><i class="fa fa-camera"></i></li>
                                 </ul>
                             </div>
                             <div class="article-body">
-                                <h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
+                                <h3 class="article-title"><a href="#">{{ article.heading }}</a></h3>
                                 <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
+                                    <li><i class="fa fa-clock-o"></i> {{ article.uploaded_on }}</li>
+
                                 </ul>
-                                <p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing
-                                    mei. Te inciderint cotidieque pro, ei iisque docendi qui, ne accommodare
-                                    theophrastus reprehendunt vel. Et commodo menandri eam.</p>
+                                <p>{{ article.article_content }}</p>
                             </div>
                         </article>
                     </div>
-
-                    <div class="col-md-4 col-sm-4">
-                        <!-- section title -->
-                        <div class="section-title">
-                            <h2 class="title">News</h2>
-                        </div>
-                        <!-- /section title -->
-
-                        <!-- ARTICLE -->
-                        <article class="article">
-                            <div class="article-img">
-                                <a href="#">
-                                    <img src={% static "./img/img-sm-1.jpg" %} alt="">
-                                </a>
-                                <ul class="article-info">
-                                    <li class="article-type"><i class="fa fa-camera"></i></li>
-                                </ul>
-                            </div>
-                            <div class="article-body">
-                                <h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
-                                </ul>
-                                <p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing
-                                    mei. Te inciderint cotidieque pro, ei iisque docendi qui, ne accommodare
-                                    theophrastus reprehendunt vel. Et commodo menandri eam.</p>
-                            </div>
-                        </article>
-                    </div>
+                    {% endfor %}
 
                     <!-- /Column 1 -->
 
                     <!-- Column 2 -->
-                    <div class="col-md-4 col-sm-4">
-                        <!-- section title -->
-                        <div class="section-title">
-                            <h2 class="title">Sport</h2>
-                        </div>
-                        <!-- /section title -->
 
-                        <!-- ARTICLE -->
-                        <article class="article">
-                            <div class="article-img">
-                                <a href="#">
-                                    <img src={% static "./img/img-sm-2.jpg" %} alt="">
-                                </a>
-                                <ul class="article-info">
-                                    <li class="article-type"><i class="fa fa-file-text"></i></li>
-                                </ul>
-                            </div>
-                            <div class="article-body">
-                                <h3 class="article-title"><a href="#">Duis urbanitas eam in, tempor consequat.</a></h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> January 31, 2017</li>
-                                    <li><i class="fa fa-comments"></i> 33</li>
-                                </ul>
-                                <p>Populo tritani laboramus ex mei, no eum iuvaret ceteros euripidis, ne alia sadipscing
-                                    mei. Te inciderint cotidieque pro, ei iisque docendi qui, ne accommodare
-                                    theophrastus reprehendunt vel. Et commodo menandri eam.</p>
-                            </div>
-                        </article>
-                        <!-- /ARTICLE -->
 
-                        <!-- /ARTICLE -->
-                    </div>
-                    <!-- /Column 2 -->
-                </div>
-            </div>
             <!-- /Main Column -->
 
             <!-- Aside Column -->

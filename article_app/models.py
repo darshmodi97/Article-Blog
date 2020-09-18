@@ -39,4 +39,20 @@ class Article(models.Model):
     type = models.CharField(max_length=100, choices=type_choices ,default='News')
     image = models.ImageField(upload_to= 'media')
     uploaded_on = models.DateField(auto_now_add=True)
-    uploaded_by = models.ForeignKey(Login, on_delete=models.CASCADE )
+    uploaded_by = models.ForeignKey(Users, on_delete=models.CASCADE )
+
+    def __str__(self):
+        return self.heading
+
+class Tags(models.Model):
+    tags_title = models.TextField()
+
+    def __str__(self):
+        return self.tags_title
+
+class Article_Tags(models.Model):
+
+    tags = models.ForeignKey(Tags,on_delete=models.CASCADE)
+    article = models.ForeignKey(Article,on_delete=models.CASCADE)
+    class Meta :
+        db_table = 'Article_Tags_mapping'

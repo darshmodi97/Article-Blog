@@ -1,3 +1,4 @@
+{% load static %}
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,11 +7,14 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Article creation</title>
+    <!-- Fevicon  -->
+    <link rel="icon" type="image/png" href={% static "favicon_io/favicon-32x32.png" %}/>
 </head>
 <body>
  <form method = "post" enctype="multipart/form-data" action="create_article">
         {% csrf_token %}
         {{ form.as_p }}
+        {{ tags_form.as_p }}
         <button type="submit">Post</button>
     </form>
 </body>

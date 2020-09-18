@@ -3,6 +3,8 @@
 <html lang="en">
 
 <head>
+    <!-- Fevicon  -->
+    <link rel="icon" type="image/png" href={% static "favicon_io/favicon-32x32.png" %}/>
     <!-- Required meta tags-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,7 +13,7 @@
     <meta name="keywords" content="Colorlib Templates">
 
     <!-- Title Page-->
-    <title>User Register Form</title>
+    <title>User Registratoin Form</title>
 
     <!-- Icons font CSS-->
     <link href={% static "vendor/mdi-font/css/material-design-iconic-font.min.css"%} rel="stylesheet" media="all">
@@ -33,7 +35,7 @@
             <div class="card card-1">
                 <div class="card-heading"></div>
                 <div class="card-body">
-                    <h2 class="title">User Registration Form</h2>
+                    <h2 class="title">Register Here : -)</h2>
                     <form method="POST" action="registeruser">{% csrf_token %}
                         <div class="input-group">
                             <input class="input--style-1" type="text" placeholder="NAME" name="name">
@@ -62,8 +64,10 @@
                         </div>
 
                         <div class="input-group">
-                                <input class="input--style-1" type="text" placeholder="USER NAME" name="username" required>
+                                <input class="input--style-1" type="text" placeholder="USER NAME" name="username" id="user_id" onkeyup="validateusername()" required>
+                                <p id="username_id"></p>
                         </div>
+
 
                         <div class="input-group">
                                 <input class="input--style-1" type="text" placeholder="MOBILE NUMBER" id="mobile" name="mobile" onkeyup="validatemobile()" required>
@@ -87,6 +91,11 @@
             </div>
         </div>
     </div>
+
+
+
+
+
 
     <!-- Jquery JS-->
     <script src={% static "vendor/jquery/jquery.min.js"%}></script>
@@ -117,7 +126,7 @@ function validatemobile() {
                 mobile.style.backgroundColor = "white";
                 {#message.style.color = goodColor;#}
                 message.innerHTML = "";
-                 document.getElementById('mysubmit').disabled = false;
+                document.getElementById('mysubmit').disabled = false;
             }
         }
 
@@ -139,6 +148,38 @@ function validatemobile() {
                 document.getElementById('mysubmit').disabled = false;
             }
         }
+
+function validateusername() {
+
+    var url = "checkusername";
+    var username = document.getElementById('user_id').value;
+    var body = "username="+username+"&csrfmiddlewaretoken={{ csrf_token }}"; //compulsory to add csrf token for post request
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+       if (xmlhttp.responseText == "Username is already taken")
+            {
+                document.getElementById("username_id").style.color ="red";
+                document.getElementById("username_id").innerHTML = xmlhttp.responseText;
+                document.getElementById('mysubmit').disabled = true;
+            }
+            else{
+                document.getElementById('username_id').style.color ="green";
+                document.getElementById("username_id").innerHTML = xmlhttp.responseText;
+                document.getElementById('mysubmit').disabled = false;
+            }
+        }
+    };
+
+    xmlhttp.open("post",url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(body);
+}
+
+
 </script>
 
 
