@@ -11,8 +11,8 @@ urlpatterns=[
     path('getlogin',views.getlogin,name='getlogin'),
     path('checkusername',views.checkusername,name='checkusername'),
     path('create_article',views.create_article,name='create_article'),
-
-
-
+    path('update_profile',views.update_profile,name = 'update_profile'),
+    path('show_post',views.show_post,name = 'show_post'),
+    path('categorical_post',views.categorical_post,name='categorical_post'),
 
 ]

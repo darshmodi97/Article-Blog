@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from article_app.models import Users,Login,Article , Article_Tags,Tags
+from article_app.models import Users,Login,Article , Article_Tags,Tags , Post_Category
 from datetime import datetime
 from .forms import ArticleForm ,TagsForm
 from django.core import exceptions
@@ -53,8 +53,8 @@ def user_dashboard(request):
         l_id = int(request.session.get('login_id'))
         Name = Users.objects.get(login_id=l_id).name
         request.session['name'] = Name
-
-        return render(request,'user_Dashboard.html')
+        articles = Article.objects.order_by('-uploaded_on')
+        return render(request,'user_Dashboard.html',{'articles':articles})
     else :
         return redirect(login)
 
@@ -98,7 +98,13 @@ def create_article(request):
                 article_id = Article.objects.latest('id')
                 print(article_id)
                 article_tags_mapping = Article_Tags.objects.create(tags = tag_id , article = article_id)
-            return HttpResponse('Article Posted !!')
+            return HttpResponse('Article Posted !!\n'
+                                '<html>'
+                                '<body>'
+                                '<br>'
+                                '<a href = "user_dashboard">Go to Home</a>'
+                                '</body>'
+                                '</html>')
         else:
             form = ArticleForm()
             tags_form = TagsForm()
@@ -109,12 +115,52 @@ def create_article(request):
         return redirect('login')
 
 
+def update_profile(request):
+    if request.session.get('login_id') is not None:
+        if request.method == 'POST':
+            print(request.body)
+            id = request.POST.get('userid')
+            print(id)
+            name = request.POST.get('name')
+            mobile = request.POST.get('mobile')
+            username = request.POST.get('username')
+            date_of_birth = request.POST.get('dob')
+            print(date_of_birth)
+            userdata = Users.objects.get(id = id)
+            userdata.name = name
+            userdata.mobile = mobile
+            userdata.username = username
+            if date_of_birth :
+                userdata.DOB = date_of_birth
+
+            userdata.save()
+            return render(request,'profile.html',{'userdata':userdata})
+        else :
+            user_data = Users.objects.filter(login_id = request.session.get('login_id')).first()
+            print(user_data)
+            return render(request,'profile.html',{'userdata':user_data})
+    else:
+        return redirect(login)
+
+def show_post(request):
+    id = request.GET.get('postid')
+    article = Article.objects.filter(id = id).first()
+    return render(request,'post.html',{'article':article})
 
 
+def categorical_post(request):
+    category_id =  request.GET.get('category_id')
+    category = Post_Category.objects.get(id= category_id)
 
+    articles = Article.objects.filter(type=category).order_by('-uploaded_on')
+    print(articles)
+    if articles :
+        return render(request,'user_Dashboard.html',{'articles':articles})
+    else:
+        return render(request, 'user_Dashboard.html', {'message': 'Sorry No post available !!'})
 
 
 """ TODO :  
-            tags,
+             tags,
             
 """
