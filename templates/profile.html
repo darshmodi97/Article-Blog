@@ -146,7 +146,8 @@
                                                 <label>Username</label>
                                             </div>
                                             <div class="col-md-6">
-                                                <input type="text" class="form-control" id="username" name="username" value="{{userdata.username}}">
+                                                <input type="text" class="form-control" id="username_id" name="username" value="{{userdata.username}}" onkeyup="validateusername()">
+                                                <p id="msg_id"></p>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -179,10 +180,41 @@
                 </div>
 
                 <div align="center" style="margin-top:10px">
-                        <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Update"/>
+                        <input type="submit" class="profile-edit-btn" id="mysubmit"  name="btnAddMore" value="Update"/>
 
                 </div>
 </form>
 </div>
+<script>
+function validateusername() {
+
+    var url = "checkusername";
+    var username = document.getElementById('username_id').value;
+    var body = "username="+username+"&csrfmiddlewaretoken={{ csrf_token }}"; //compulsory to add csrf token for post request
+    var xmlhttp = new XMLHttpRequest();
+
+    xmlhttp.onreadystatechange = function() {
+
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+
+       if (xmlhttp.responseText == "Username is already taken")
+            {
+                document.getElementById("msg_id").style.color ="red";
+                document.getElementById("msg_id").innerHTML = xmlhttp.responseText;
+                document.getElementById('mysubmit').disabled = true;
+            }
+            else{
+                document.getElementById('msg_id').style.color ="green";
+                document.getElementById("msg_id").innerHTML = xmlhttp.responseText;
+                document.getElementById('mysubmit').disabled = false;
+            }
+        }
+    };
+
+    xmlhttp.open("post",url, true);
+    xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xmlhttp.send(body);
+}
+</script>
 </body>
 </html>
