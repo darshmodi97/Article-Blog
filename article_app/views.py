@@ -11,7 +11,6 @@ from django.core import exceptions
 
 def index(request):
     articles = Article.objects.order_by('-uploaded_on')
-    print(articles)
     return render(request,'index.html',{'articles':articles})
 
 def checkusername(request):
@@ -64,7 +63,7 @@ def logout_act(request):
 
 
 def login(request):
-    return render(request,'login.html')
+    return render(request,'login.html',{'message':'Sorry ! You have to Login first..'})
 
 
 def getlogin(request):
@@ -149,18 +148,42 @@ def show_post(request):
 
 
 def categorical_post(request):
-    category_id =  request.GET.get('category_id')
-    category = Post_Category.objects.get(id= category_id)
+    if request.session.get('login_id') is not None:
+        category_id =  request.GET.get('category_id')
+        category = Post_Category.objects.get(id= category_id)
 
-    articles = Article.objects.filter(type=category).order_by('-uploaded_on')
-    print(articles)
-    if articles :
-        return render(request,'user_Dashboard.html',{'articles':articles})
+        articles = Article.objects.filter(type=category).order_by('-uploaded_on')
+        print(articles)
+        if articles :
+            return render(request,'user_Dashboard.html',{'articles':articles})
+        else:
+            return render(request, 'user_Dashboard.html', {'message': 'Sorry No post available !!'})
     else:
-        return render(request, 'user_Dashboard.html', {'message': 'Sorry No post available !!'})
+        category_id = request.GET.get('category_id')
+        category = Post_Category.objects.get(id=category_id)
 
+        articles = Article.objects.filter(type=category).order_by('-uploaded_on')
+        print(articles)
+        if articles:
+            return render(request, 'index.html', {'articles': articles})
+        else:
+            return render(request, 'index.html', {'message': 'Sorry No post available !!'})
+        return redirect(login)
 
-""" TODO :  
-             tags,
-            
-"""
+def search_post (request): # showing post by search
+
+    search = request.GET.get('search')
+    all_tags_id = Tags.objects.filter(tags_title__icontains=search)
+    if len(all_tags_id) == 0 :
+        return render(request,'search_post.html',{'message':"Sorry ! No articles related your search "})
+    else:
+        print("all tags id :",all_tags_id)
+        articles= []
+        for tag_id in all_tags_id:
+            article_tags_id = Article_Tags.objects.get(tags=tag_id)
+            print("article id from article_tags table:",article_tags_id.article.id)
+            article_post = Article.objects.filter(id=article_tags_id.article.id)
+            print(article_post)
+            articles.append(article_post)
+        print(articles)
+        return render(request,'search_post.html',{'articles':articles})

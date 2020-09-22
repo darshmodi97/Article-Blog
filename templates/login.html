@@ -190,8 +190,10 @@ a{
 <!------ Include the above in your HEAD tag ---------->
 
 <div class="login-reg-panel">
-
 		<div class="white-panel">
+            {% if message %}
+                 <h5 style="color:orange">{{message}}</h5>
+            {% endif %}
 			<div class="login-show">
 				<h2>LOGIN</h2>
                 <form action="getlogin" name="form" method="post">{% csrf_token %}
@@ -201,11 +203,9 @@ a{
 				<a href="#">Forgot password?</a>
                     <h6>Don't Have an account ?<a href="register">click here</a></h6>
                 </form>
-
+                <a href="/ ">Go back</a>
                     {% if error %}
-
-                    <h5 style="color: red; text-align:center">Error : {{error}}</h5>
-
+                        <h5 style="color: red; text-align:center">Error : {{error}}</h5>
                     {% endif %}
 
 			</div>

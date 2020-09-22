@@ -33,7 +33,6 @@
 <header id="header">
     <!-- Top Header -->
     <div id="top-header">
-
         <div class="container">
             <div class="header-links" style="float: right">
                 <ul>
@@ -41,9 +40,6 @@
                     <li><a href="login"><i class="fa fa-sign-in"></i> Login</a></li>
                 </ul>
             </div>
-              <div class="header-logo">
-						<a href="/ " class="logo"><img src={% static "./img/logo.png"%} alt=""></a>
-              </div>
         </div>
     </div>
     <!-- /Top Header -->
@@ -52,8 +48,11 @@
     <div id="nav-header">
         <div class="container">
             <nav id="main-nav">
+                <div class="nav-logo">
+                    <a href="#" class="logo"><img src={% static "./img/logo-alt.png" %} alt=""></a>
+                </div>
                 <ul class="main-nav nav navbar-nav">
-                    <li class="active"><a href=" ">Home</a></li>
+                    <li class="active"><a href="/ ">Home</a></li>
                     <li><a href="categorical_post?category_id=2">News</a></li>
                     <li><a href="categorical_post?category_id=3">Sport</a></li>
                     <li><a href="categorical_post?category_id=1">Music</a></li>
@@ -76,30 +75,32 @@
     <!-- /Nav Header -->
 </header>
 <!-- /Header -->
-{% if message %}
+
+<!-- Owl Carousel 1 -->
+    {% if message %}
     <h5 style="color :red ; text-align: center">{{ message }}</h5>
     {% endif %}
-<!-- Owl Carousel 1 -->
 <div id="owl-carousel-1" class="owl-carousel owl-theme center-owl-nav">
     <!-- ARTICLE -->
-    {% for article in articles %}
-    <article class="article thumb-article">
-        <div class="article-img">
-            <img src="media/{{article.image}}" alt="">
-        </div>
-        <div class="article-body">
-            <ul class="article-info">
-                <li class="article-category"><a href="show_post?postid={{article.id}}">{{article.type.category_name}}</a></li>
-                <li class="article-type"><i class="fa fa-camera"></i></li>
-            </ul>
-            <h2 class="article-title"><a href="show_post?postid={{article.id}}">{{article.heading}}</a></h2>
-            <ul class="article-meta">
-                <li><i class="fa fa-clock-o"></i>{{article.uploaded_on}}</li>
-            </ul>
-        </div>
-    </article>
+    {% for data in articles %}
+        {% for article in data %}
+                <article class="article thumb-article">
+                    <div class="article-img">
+                        <img src="media/{{article.image}}" alt="">
+                    </div>
+                    <div class="article-body">
+                        <ul class="article-info">
+                            <li class="article-category"><a href="show_post?postid={{article.id}}">{{article.type.category_name}}</a></li>
+                            <li class="article-type"><i class="fa fa-camera"></i></li>
+                        </ul>
+                        <h2 class="article-title"><a href="show_post?postid={{article.id}}">{{article.heading}}</a></h2>
+                        <ul class="article-meta">
+                            <li><i class="fa fa-clock-o"></i>{{article.uploaded_on}}</li>
+                        </ul>
+                    </div>
+                </article>
+        {% endfor %}
     {% endfor %}
-
 </div>
 <!-- /Owl Carousel 1 -->
 
@@ -115,36 +116,37 @@
                 <div class="row">
                     <!-- Column 1 -->
 
-                    {% for article in articles %}
-                    <div class="col-md-4 col-sm-4">
-                        <!-- section title -->
-                        <div class="section-title">
-                            <h2 class="title">{{ article.type.category_name }}</h2>
-                        </div>
-                        <!-- /section title -->
+                    {% for data in articles %}
+                        {% for article in data %}
+                            <div class="col-md-4 col-sm-4">
+                                <!-- section title -->
+                                <div class="section-title">
+                                    <h2 class="title">{{ article.type.category_name }}</h2>
+                                </div>
+                                <!-- /section title -->
 
-                        <!-- ARTICLE -->
-                        <article class="article">
-                            <div class="article-img">
-                                <a href="#">
-                                    <img src= media/{{ article.image }} alt="">
-                                </a>
-                                <ul class="article-info">
-                                    <li class="article-type"><i class="fa fa-camera"></i></li>
-                                </ul>
-                            </div>
-                            <div class="article-body">
-                                <h3 class="article-title"><a href="show_post?postid={{article.id}}">{{ article.heading }}</a></h3>
-                                <ul class="article-meta">
-                                    <li><i class="fa fa-clock-o"></i> {{ article.uploaded_on }}</li>
+                                <!-- ARTICLE -->
+                                <article class="article">
+                                    <div class="article-img">
+                                        <a href="#">
+                                            <img src= media/{{ article.image }} alt="">
+                                        </a>
+                                        <ul class="article-info">
+                                            <li class="article-type"><i class="fa fa-camera"></i></li>
+                                        </ul>
+                                    </div>
+                                    <div class="article-body">
+                                        <h3 class="article-title"><a href="show_post?postid={{article.id}}">{{ article.heading }}</a></h3>
+                                        <ul class="article-meta">
+                                            <li><i class="fa fa-clock-o"></i> {{ article.uploaded_on }}</li>
 
-                                </ul>
-                                <p>{{ article.article_content }}</p>
+                                        </ul>
+                                        <p>{{ article.article_content }}</p>
+                                    </div>
+                                </article>
                             </div>
-                        </article>
-                    </div>
+                        {% endfor %}
                     {% endfor %}
-
                     <!-- /Column 1 -->
 
                     <!-- Column 2 -->

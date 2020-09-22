@@ -32,14 +32,20 @@
 
 <!-- Header -->
 <header id="header">
+
     <!-- Top Header -->
     <div id="top-header">
+
         <div class="container">
+
             <div class="header-links" style="float: right">
                 <ul>
                     <li><a href="update_profile">WELCOME {{ request.session.name }}</a></li>
                     <li><a href="logout_act">Logout</a></li>
                 </ul>
+            </div>
+            <div class="nav-logo">
+                    <a href="user_dashboard" class="logo"><img src={% static "./img/logo.png" %} alt=""></a>
             </div>
         </div>
     </div>
@@ -55,14 +61,12 @@
         </div>
     </div>
     <!-- /Center Header -->
-
     <!-- Nav Header -->
     <div id="nav-header">
+
         <div class="container">
+
             <nav id="main-nav">
-                <div class="nav-logo">
-                    <a href="#" class="logo"><img src={% static "./img/logo-alt.png" %} alt=""></a>
-                </div>
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a href="user_dashboard">Home</a></li>
                     <li><a href="categorical_post?category_id=2">News</a></li>
@@ -78,7 +82,7 @@
                 <button class="search-collapse-btn"><i class="fa fa-search"></i></button>
                 <button class="nav-collapse-btn"><i class="fa fa-bars"></i></button>
                 <div class="search-form">
-                    <form>
+                    <form action="search_post" method="get">
                         <input class="input" type="text" name="search" placeholder="Search">
                     </form>
                 </div>
