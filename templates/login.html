@@ -1,9 +1,8 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <!-- Fevicon  -->
-    <link rel="icon" type="image/png" href={% static "favicon_io/favicon-32x32.png" %}/>
+    <link rel="icon" type="image/png" href='{% static "favicon_io/favicon-32x32.png" %}'/>
     <meta charset="UTF-8">
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -15,14 +14,14 @@
     <!-- Added CSS -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700%7CLato:300,400" rel="stylesheet">
     <!-- Bootstrap -->
-    <link type="text/css" rel="stylesheet" href={% static "css/bootstrap.min.css" %}/>
+    <link type="text/css" rel="stylesheet" href='{% static "css/bootstrap.min.css" %}''>
     <!-- Owl Carousel -->
-    <link type="text/css" rel="stylesheet" href={% static "css/owl.carousel.css" %}/>
-    <link type="text/css" rel="stylesheet" href={% static "css/owl.theme.default.css" %}/>
+    <link type="text/css" rel="stylesheet" href='{% static "css/owl.carousel.css" %}'/>
+    <link type="text/css" rel="stylesheet" href='{% static "css/owl.theme.default.css" %}'/>
     <!-- Font Awesome Icon -->
-    <link rel="stylesheet" href={% static "css/font-awesome.min.css" %}>
+    <link rel="stylesheet" href='{% static "css/font-awesome.min.css" %}'>
     <!-- Custom stlylesheet -->
-    <link type="text/css" rel="stylesheet" href={% static "css/style.css" %}/>
+    <link type="text/css" rel="stylesheet" href='{% static "css/style.css" %}'/>
 
     <!-- End CSS-->
 
@@ -199,11 +198,11 @@ a{
                 <form action="getlogin" name="form" method="post">{% csrf_token %}
 				<input type="text" placeholder="Username" name="username">
 				<input type="password" placeholder="Password" name="password">
-				<input type="submit" value="Login" >
-				<a href="#">Forgot password?</a>
+				<input type="submit" value="Login &blacktriangleright;" >
+				<a href="forget_password">Forgot password?</a>
                     <h6>Don't Have an account ?<a href="register">click here</a></h6>
                 </form>
-                <a href="/ ">Go back</a>
+                <a href="/ ">&laquo; Go back</a>
                     {% if error %}
                         <h5 style="color: red; text-align:center">Error : {{error}}</h5>
                     {% endif %}

@@ -1,9 +1,12 @@
+import random
+
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from article_app.models import Users,Login,Article , Article_Tags,Tags , Post_Category
 from datetime import datetime
 from .forms import ArticleForm ,TagsForm
+from twilio.rest import Client
 from django.core import exceptions
 # from django.contrib.auth import logout
 # Create your views here.
@@ -63,7 +66,7 @@ def logout_act(request):
 
 
 def login(request):
-    return render(request,'login.html',{'message':'Sorry ! You have to Login first..'})
+    return render(request,'login.html')
 
 
 def getlogin(request):
@@ -77,6 +80,69 @@ def getlogin(request):
         return render(request,'login.html',{'error': "Username or Password Incorrect" })
 
     return redirect(user_dashboard)
+
+
+def forget_password(request):
+    if request.method == 'POST':
+        mobile = request.POST.get('mobile')
+        otp = random.randint(1000,9999)
+        request.session['otp'] = str(otp)
+        request.session['mobile'] = mobile
+        print(otp)
+        try:
+            check_mobile = Users.objects.get(mobile=mobile)
+            #Your new Phone Number is +15205953157
+            account = "ACa116d5c31df01d9700df67da9b8af7de"
+            token = "2f16bfeb36ec80122c202cfd5c84c248"
+            client = Client(account, token)
+            message = client.messages.create(
+                body="Your otp for password reset is :"+str(otp),
+                from_= "+15205953157",
+                to= "9998090056"
+            )
+            print(message.sid)
+            msg = "Otp sent to registered mobile number."
+            return render(request,'validate_otp.html',{'msg':msg})
+        except :
+
+            msg = "This mobile number is not registered."
+            return render(request,'forget.html',{'message':msg})
+    else:
+        return render(request,'forget.html')
+
+def validate_otp(request):
+    sent_otp = request.session.get('otp')
+    received_otp = request.POST.get('otp')
+    print(sent_otp)
+    if sent_otp == received_otp :
+        return redirect('change_password')
+    else:
+        msg = "OTP is not matched, Please enter valid OTP"
+        return render(request, 'validate_otp.html', {'error': msg})
+
+def change_password(request):
+    if request.method == 'POST':
+        mobile = request.session.get('mobile')
+        print(mobile)
+        password = request.POST.get('pass')
+        user = Users.objects.filter(mobile= mobile).first()
+        print(user)
+        user.password = password
+        user.save()
+        return HttpResponse("Password changed successfully.."
+                            '<html>'
+                            '<body>'
+                            '<br>'
+                            '<a href = "/ ">Go to Home</a>'
+                            '</body>'
+                            '</html>'
+                            )
+    else:
+        return render(request,'change_password.html')
+
+
+
+
 
 
 def create_article(request):
@@ -124,11 +190,13 @@ def update_profile(request):
             mobile = request.POST.get('mobile')
             username = request.POST.get('username')
             date_of_birth = request.POST.get('dob')
+
             print(date_of_birth)
             userdata = Users.objects.get(id = id)
             userdata.name = name
             userdata.mobile = mobile
             userdata.username = username
+
             if date_of_birth :
                 userdata.DOB = date_of_birth
 

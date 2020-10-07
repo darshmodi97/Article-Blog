@@ -1,0 +1,30 @@
+{% load static%}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Forget Password</title>
+    <link rel="icon" type="image/png" href='{%static "favicon_io/favicon-32x32.png" %}'/>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+<h5>&divonx; Please Enter your registered mobile number, we will send you the otp for verification. </h5>
+    <hr>
+<form class="form-inline" action="/forget_password" method="post">{% csrf_token %}
+
+  <label class="mr-sm-2">Registered Mobile :</label>
+  <input class="form-control mb-0 mr-sm-2" placeholder="Registered Mobile number" id="mobile" name="mobile">
+  <button type="submit" class="btn btn-outline-success">Send</button>
+</form>
+    {% if message == "This mobile number is not registered." %}
+    <div class="alert alert-danger">
+           <strong>Error!</strong> {{ message }} &#128549;
+         </div>
+    {% endif %}
+</div>
+</body>
+</html>

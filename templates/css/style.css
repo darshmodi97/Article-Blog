@@ -1362,3 +1362,6 @@ header #center-header {
 	    -ms-transform:translateY(0px);
 	        transform:translateY(0px);
 }
+#News.active{
+    background-color: red;
+}
