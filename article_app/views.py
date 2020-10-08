@@ -3,6 +3,8 @@ import random
 from django.contrib import messages
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+
+from Article import settings
 from article_app.models import Users,Login,Article , Article_Tags,Tags , Post_Category
 from datetime import datetime
 from .forms import ArticleForm ,TagsForm
@@ -91,22 +93,25 @@ def forget_password(request):
         print(otp)
         try:
             check_mobile = Users.objects.get(mobile=mobile)
-            #Your new Phone Number is +15205953157
-            account = "ACa116d5c31df01d9700df67da9b8af7de"
-            token = "2f16bfeb36ec80122c202cfd5c84c248"
-            client = Client(account, token)
-            message = client.messages.create(
-                body="Your otp for password reset is :"+str(otp),
-                from_= "+15205953157",
-                to= "9998090056"
-            )
-            print(message.sid)
-            msg = "Otp sent to registered mobile number."
-            return render(request,'validate_otp.html',{'msg':msg})
-        except :
+        except:
 
             msg = "This mobile number is not registered."
-            return render(request,'forget.html',{'message':msg})
+            return render(request, 'forget.html', {'message': msg})
+
+        try:
+            client = Client(settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN )
+            message = client.messages.create(
+                body="Your otp for password reset is :"+str(otp),
+                from_= settings.TWILIO_NUMBER,
+                to= "+91"+mobile
+            )
+            print(message.sid)
+        except Exception as e:
+            print(e)
+
+        msg = "Otp sent to registered mobile number."
+        return render(request,'validate_otp.html',{'msg':msg})
+
     else:
         return render(request,'forget.html')
 
@@ -139,10 +144,6 @@ def change_password(request):
                             )
     else:
         return render(request,'change_password.html')
-
-
-
-
 
 
 def create_article(request):

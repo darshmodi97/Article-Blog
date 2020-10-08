@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '81$r-p#ml$o@gmxa!8e87=7m^-m6=tj7&39(ueofn%#+bkgp=b'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -72,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Article.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -81,12 +78,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'article',
         'USER': 'root',
-        'PASSWORD':'root',
-        'HOST':'localhost',
-        'PORT':3306
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': 3306
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -106,7 +102,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -120,15 +115,19 @@ USE_L10N = True
 
 USE_TZ = True
 
+# twilio configuration
+TWILIO_ACCOUNT_SID='your SID'
+TWILIO_AUTH_TOKEN='your token'
+TWILIO_NUMBER='+countrycode your number '
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/templates/'
 STATICFILES_DIRS = [
-			os.path.join(BASE_DIR, 'templates'),
-            'article_app',
-        ]
+    os.path.join(BASE_DIR, 'templates'),
+    'article_app',
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
